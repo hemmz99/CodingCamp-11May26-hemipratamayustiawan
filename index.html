@@ -7,6 +7,18 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
+    <header class="app-header">
+      <h1 class="app-title">Expense &amp; Budget Visualizer</h1>
+      <button
+        id="theme-toggle"
+        class="theme-toggle"
+        aria-label="Switch to dark mode"
+        title="Toggle dark mode"
+      >
+        <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+        <span class="theme-toggle__label">Dark</span>
+      </button>
+    </header>
     <main>
       <section id="balance-display" aria-label="Total Balance">
         <h1>Total Balance: <span id="balance-amount">$0.00</span></h1>

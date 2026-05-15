@@ -719,10 +719,78 @@ function clearFieldErrors() {
 }
 
 // =============================================================================
+// Theme Module
+// =============================================================================
+
+const THEME_KEY = 'expense_theme';
+
+/**
+ * Applies the given theme ('light' or 'dark') to the document and updates
+ * the toggle button's label and aria-label to reflect the current state.
+ *
+ * @param {'light'|'dark'} theme
+ */
+function applyTheme(theme) {
+  const html      = document.documentElement;
+  const toggleBtn = document.getElementById('theme-toggle');
+
+  if (theme === 'dark') {
+    html.setAttribute('data-theme', 'dark');
+  } else {
+    html.removeAttribute('data-theme');
+  }
+
+  if (toggleBtn) {
+    const icon  = toggleBtn.querySelector('.theme-toggle__icon');
+    const label = toggleBtn.querySelector('.theme-toggle__label');
+    if (theme === 'dark') {
+      if (icon)  icon.textContent  = '☀️';
+      if (label) label.textContent = 'Light';
+      toggleBtn.setAttribute('aria-label', 'Switch to light mode');
+    } else {
+      if (icon)  icon.textContent  = '🌙';
+      if (label) label.textContent = 'Dark';
+      toggleBtn.setAttribute('aria-label', 'Switch to dark mode');
+    }
+  }
+}
+
+/**
+ * Initializes the theme toggle button.
+ * Reads the saved preference from localStorage; falls back to the OS
+ * preference via `prefers-color-scheme`; defaults to light.
+ * Wires up the toggle button click handler.
+ */
+function initTheme() {
+  const saved = localStorage.getItem(THEME_KEY);
+  const prefersDark = window.matchMedia &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  const initial = saved === 'dark' || saved === 'light'
+    ? saved
+    : (prefersDark ? 'dark' : 'light');
+
+  applyTheme(initial);
+
+  const toggleBtn = document.getElementById('theme-toggle');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function () {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next    = current === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      try { localStorage.setItem(THEME_KEY, next); } catch (_) { /* ignore */ }
+    });
+  }
+}
+
+// =============================================================================
 // Initialization
 // =============================================================================
 
 document.addEventListener('DOMContentLoaded', function () {
+  // Initialize theme toggle (must run before chart init to avoid flash)
+  initTheme();
+
   // Task 10.1 — Initialize the Chart.js pie chart on the canvas element
   const canvasEl = document.getElementById('spending-chart');
   initChart(canvasEl);

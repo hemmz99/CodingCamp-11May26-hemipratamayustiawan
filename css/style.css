@@ -1,6 +1,52 @@
 /* Expense & Budget Visualizer - Stylesheet */
 
 /* ============================================================
+   0. Theme Variables (Light & Dark)
+   ============================================================ */
+
+:root {
+  --color-bg:              #f0f2f5;
+  --color-surface:         #ffffff;
+  --color-surface-alt:     #f8f9fb;
+  --color-border:          #e8ecf2;
+  --color-border-input:    #d1d5db;
+  --color-text:            #1a1a2e;
+  --color-text-muted:      #6b7280;
+  --color-text-label:      #444444;
+  --color-accent:          #0f3460;
+  --color-accent-dark:     #16213e;
+  --color-amount:          #0f3460;
+  --color-scrollbar-track: #f0f2f5;
+  --color-scrollbar-thumb: #c0c8d8;
+  --color-input-bg:        #fafafa;
+  --color-input-focus-bg:  #ffffff;
+  --color-error-bg:        #fff5f5;
+  --shadow-card:           0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-balance:        0 4px 12px rgba(15, 52, 96, 0.3);
+}
+
+[data-theme="dark"] {
+  --color-bg:              #0d1117;
+  --color-surface:         #161b22;
+  --color-surface-alt:     #1c2128;
+  --color-border:          #30363d;
+  --color-border-input:    #30363d;
+  --color-text:            #e6edf3;
+  --color-text-muted:      #8b949e;
+  --color-text-label:      #c9d1d9;
+  --color-accent:          #58a6ff;
+  --color-accent-dark:     #388bfd;
+  --color-amount:          #79c0ff;
+  --color-scrollbar-track: #1c2128;
+  --color-scrollbar-thumb: #30363d;
+  --color-input-bg:        #0d1117;
+  --color-input-focus-bg:  #161b22;
+  --color-error-bg:        #2d1515;
+  --shadow-card:           0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-balance:        0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================================
    1. CSS Reset & Base Styles
    ============================================================ */
 
@@ -22,10 +68,11 @@ body {
     Arial, sans-serif;
   font-size: 1rem;
   line-height: 1.5;
-  color: #1a1a2e;
-  background-color: #f0f2f5;
+  color: var(--color-text);
+  background-color: var(--color-bg);
   min-width: 320px;
   overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 h1,
@@ -45,7 +92,64 @@ select {
 }
 
 /* ============================================================
-   2. Main Layout Container
+   2. App Header & Theme Toggle
+   ============================================================ */
+
+.app-header {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0.75rem 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.app-title {
+  font-size: clamp(1rem, 3.5vw, 1.3rem);
+  font-weight: 700;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1.5px solid var(--color-border-input);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  touch-action: manipulation;
+}
+
+.theme-toggle:hover {
+  background-color: var(--color-surface-alt);
+  border-color: var(--color-accent);
+}
+
+.theme-toggle:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.theme-toggle__icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* ============================================================
+   3. Main Layout Container
    ============================================================ */
 
 main {
@@ -59,7 +163,7 @@ main {
 }
 
 /* ============================================================
-   3. Balance Display Section
+   4. Balance Display Section
    ============================================================ */
 
 #balance-display {
@@ -68,7 +172,7 @@ main {
   border-radius: 12px;
   padding: 1.25rem 1.5rem;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(15, 52, 96, 0.3);
+  box-shadow: var(--shadow-balance);
 }
 
 #balance-display h1 {
@@ -84,21 +188,21 @@ main {
 }
 
 /* ============================================================
-   4. Input Form
+   5. Input Form
    ============================================================ */
 
 #input-form {
-  background-color: #ffffff;
+  background-color: var(--color-surface);
   border-radius: 12px;
   padding: 1.25rem 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-card);
 }
 
 #input-form h2 {
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  color: #0f3460;
+  color: var(--color-accent);
 }
 
 .form-group {
@@ -111,58 +215,56 @@ main {
 .form-group label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #444;
+  color: var(--color-text-label);
 }
 
 .form-group input,
 .form-group select {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  border: 1.5px solid #d1d5db;
+  border: 1.5px solid var(--color-border-input);
   border-radius: 8px;
-  background-color: #fafafa;
-  color: #1a1a2e;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  background-color: var(--color-input-bg);
+  color: var(--color-text);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease,
+    background-color 0.2s ease, color 0.2s ease;
   min-height: 2.5rem;
-  /* Prevent inputs from overflowing on narrow viewports */
   max-width: 100%;
 }
 
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #0f3460;
-  box-shadow: 0 0 0 3px rgba(15, 52, 96, 0.15);
-  background-color: #ffffff;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+  background-color: var(--color-input-focus-bg);
 }
 
-/* Remove number input spinners for cleaner look (optional) */
 .form-group input[type="number"]::-webkit-inner-spin-button,
 .form-group input[type="number"]::-webkit-outer-spin-button {
   opacity: 1;
 }
 
 /* ============================================================
-   5. Field Error Messages
+   6. Field Error Messages
    ============================================================ */
 
 .field-error {
   display: block;
   font-size: 0.8rem;
   color: #dc2626;
-  min-height: 1.1em; /* Reserve space to avoid layout shift */
+  min-height: 1.1em;
   word-break: break-word;
 }
 
-/* Highlight the input when its sibling error is non-empty */
 .form-group:has(.field-error:not(:empty)) input,
 .form-group:has(.field-error:not(:empty)) select {
   border-color: #dc2626;
-  background-color: #fff5f5;
+  background-color: var(--color-error-bg);
 }
 
 /* ============================================================
-   6. Submit Button
+   7. Submit Button
    ============================================================ */
 
 #input-form button[type="submit"] {
@@ -170,7 +272,7 @@ main {
   width: 100%;
   padding: 0.625rem 1rem;
   margin-top: 0.5rem;
-  background-color: #0f3460;
+  background-color: var(--color-accent);
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -179,12 +281,11 @@ main {
   cursor: pointer;
   transition: background-color 0.15s ease, transform 0.1s ease;
   min-height: 2.75rem;
-  /* Ensure button is always tappable on mobile */
   touch-action: manipulation;
 }
 
 #input-form button[type="submit"]:hover {
-  background-color: #16213e;
+  background-color: var(--color-accent-dark);
 }
 
 #input-form button[type="submit"]:active {
@@ -197,15 +298,14 @@ main {
 }
 
 /* ============================================================
-   7. Transaction List Section
+   8. Transaction List Section
    ============================================================ */
 
 #transaction-list-section {
-  background-color: #ffffff;
+  background-color: var(--color-surface);
   border-radius: 12px;
   padding: 1.25rem 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  /* Prevent section itself from growing unbounded */
+  box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -215,31 +315,28 @@ main {
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 0.875rem;
-  color: #0f3460;
+  color: var(--color-accent);
   flex-shrink: 0;
 }
 
-/* Scrollable transaction list container — Requirement 2.3 */
 #transaction-list {
   overflow-y: auto;
   max-height: 320px;
-  padding-right: 0.25rem; /* Space for scrollbar */
-  /* Smooth scrolling on iOS */
+  padding-right: 0.25rem;
   -webkit-overflow-scrolling: touch;
 }
 
-/* Scrollbar styling (Webkit) */
 #transaction-list::-webkit-scrollbar {
   width: 6px;
 }
 
 #transaction-list::-webkit-scrollbar-track {
-  background: #f0f2f5;
+  background: var(--color-scrollbar-track);
   border-radius: 3px;
 }
 
 #transaction-list::-webkit-scrollbar-thumb {
-  background: #c0c8d8;
+  background: var(--color-scrollbar-thumb);
   border-radius: 3px;
 }
 
@@ -247,7 +344,6 @@ main {
   background: #8a96b0;
 }
 
-/* Individual transaction list items (rendered by JS) */
 #transaction-list li {
   display: flex;
   align-items: center;
@@ -255,9 +351,9 @@ main {
   gap: 0.5rem;
   padding: 0.625rem 0.75rem;
   border-radius: 8px;
-  background-color: #f8f9fb;
+  background-color: var(--color-surface-alt);
   margin-bottom: 0.5rem;
-  border: 1px solid #e8ecf2;
+  border: 1px solid var(--color-border);
   flex-wrap: wrap;
   word-break: break-word;
 }
@@ -266,7 +362,6 @@ main {
   margin-bottom: 0;
 }
 
-/* Transaction item details (name, amount, category) */
 #transaction-list li .transaction-info {
   display: flex;
   flex-direction: column;
@@ -281,20 +376,20 @@ main {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--color-text);
 }
 
 #transaction-list li .transaction-amount {
   font-size: 0.875rem;
-  color: #0f3460;
+  color: var(--color-amount);
   font-weight: 500;
 }
 
 #transaction-list li .transaction-category {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--color-text-muted);
 }
 
-/* Delete button inside list items */
 #transaction-list li button {
   flex-shrink: 0;
   padding: 0.3rem 0.6rem;
@@ -310,33 +405,42 @@ main {
   touch-action: manipulation;
 }
 
+[data-theme="dark"] #transaction-list li button {
+  background-color: #2d1515;
+  color: #f87171;
+  border-color: #7f1d1d;
+}
+
 #transaction-list li button:hover {
   background-color: #fca5a5;
 }
 
+[data-theme="dark"] #transaction-list li button:hover {
+  background-color: #7f1d1d;
+}
+
 #transaction-list li button:focus-visible {
-  outline: 3px solid #0f3460;
+  outline: 3px solid var(--color-accent);
   outline-offset: 2px;
 }
 
-/* Empty state message */
 #transaction-list-empty {
   font-size: 0.9rem;
-  color: #9ca3af;
+  color: var(--color-text-muted);
   text-align: center;
   padding: 1.5rem 0;
   font-style: italic;
 }
 
 /* ============================================================
-   8. Chart Section
+   9. Chart Section
    ============================================================ */
 
 #chart-section {
-  background-color: #ffffff;
+  background-color: var(--color-surface);
   border-radius: 12px;
   padding: 1.25rem 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -346,12 +450,11 @@ main {
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 0.875rem;
-  color: #0f3460;
+  color: var(--color-accent);
   align-self: flex-start;
   width: 100%;
 }
 
-/* Canvas wrapper — constrain chart so it never overflows */
 #spending-chart {
   width: 100% !important;
   max-width: 320px;
@@ -359,10 +462,9 @@ main {
   display: block;
 }
 
-/* Empty state for chart */
 #chart-empty {
   font-size: 0.9rem;
-  color: #9ca3af;
+  color: var(--color-text-muted);
   text-align: center;
   padding: 1.5rem 0;
   font-style: italic;
@@ -370,11 +472,9 @@ main {
 }
 
 /* ============================================================
-   9. Non-Blocking Error / Warning Banner
+   10. Non-Blocking Error / Warning Banner
    ============================================================ */
 
-/* The JS uses inline styles for the banner, but these classes
-   provide a baseline if the banner element is given a class. */
 .error-banner,
 .warning-banner {
   position: fixed;
@@ -406,19 +506,23 @@ main {
 }
 
 /* ============================================================
-   10. Responsive Layout — 320px and above
+   11. Responsive Layout — 320px and above
    ============================================================ */
 
-/*
- * The base styles above are already mobile-first (single column,
- * fluid widths, no fixed pixel widths that could cause overflow).
- * The rules below refine the layout at larger breakpoints.
- */
-
-/* Small phones: 320px – 479px
-   Everything is already single-column. Just ensure padding is
-   tight enough to avoid horizontal scroll. */
 @media (max-width: 479px) {
+  .app-header {
+    padding: 0.5rem 0.75rem 0;
+  }
+
+  .app-title {
+    font-size: 0.9rem;
+  }
+
+  /* Icon only on very small screens — hide the label text */
+  .theme-toggle__label {
+    display: none;
+  }
+
   main {
     padding: 0.75rem;
     gap: 1rem;
@@ -443,8 +547,11 @@ main {
   }
 }
 
-/* Tablets and wider: 600px+ — optional two-column layout hint */
 @media (min-width: 600px) {
+  .app-header {
+    padding: 1rem 1.5rem 0;
+  }
+
   main {
     padding: 1.5rem;
     gap: 1.5rem;
@@ -455,8 +562,11 @@ main {
   }
 }
 
-/* Desktop: 720px+ — max-width already constrains the container */
 @media (min-width: 720px) {
+  .app-header {
+    padding: 1.5rem 1.5rem 0;
+  }
+
   main {
     padding: 2rem 1.5rem;
   }
