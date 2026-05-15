@@ -543,6 +543,16 @@ function renderTransactionList() {
     const li = document.createElement('li');
     li.dataset.id = tx.id;
 
+    // Check budget limit — highlight if transaction exceeds it
+    const budgetInput = document.getElementById('budget-limit');
+    const budgetLimit = budgetInput && budgetInput.value !== ''
+      ? parseFloat(budgetInput.value)
+      : NaN;
+    const isOverBudget = !isNaN(budgetLimit) && budgetLimit > 0 && tx.amount > budgetLimit;
+    if (isOverBudget) {
+      li.classList.add('over-budget');
+    }
+
     // Info container
     const infoDiv = document.createElement('div');
     infoDiv.className = 'transaction-info';
@@ -550,6 +560,15 @@ function renderTransactionList() {
     const nameSpan = document.createElement('span');
     nameSpan.className = 'transaction-name';
     nameSpan.textContent = tx.name;
+
+    // Append a warning badge if this transaction exceeds the budget limit
+    if (isOverBudget) {
+      const badge = document.createElement('span');
+      badge.className = 'over-budget-badge';
+      badge.setAttribute('aria-label', 'Exceeds budget limit');
+      badge.textContent = '⚠ Over limit';
+      nameSpan.appendChild(badge);
+    }
 
     const amountSpan = document.createElement('span');
     amountSpan.className = 'transaction-amount';
@@ -840,5 +859,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const sortEl = document.getElementById('sort-order');
   if (sortEl) {
     sortEl.addEventListener('change', renderTransactionList);
+  }
+
+  // Wire up the budget limit input — re-render list on change so highlights update live
+  const budgetLimitEl = document.getElementById('budget-limit');
+  if (budgetLimitEl) {
+    budgetLimitEl.addEventListener('input', renderTransactionList);
   }
 });

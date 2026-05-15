@@ -245,6 +245,21 @@ main {
   opacity: 1;
 }
 
+/* Budget limit hint text */
+.field-hint {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* Separator between regular fields and the budget limit field */
+.budget-limit-group {
+  margin-top: 0.5rem;
+  padding-top: 0.875rem;
+  border-top: 1px dashed var(--color-border);
+}
+
 /* ============================================================
    6. Field Error Messages
    ============================================================ */
@@ -397,6 +412,49 @@ main {
   border: 1px solid var(--color-border);
   flex-wrap: wrap;
   word-break: break-word;
+}
+
+/* Budget limit exceeded highlight */
+#transaction-list li.over-budget {
+  background-color: #fff0f0;
+  border-color: #fca5a5;
+}
+
+[data-theme="dark"] #transaction-list li.over-budget {
+  background-color: #2d1515;
+  border-color: #7f1d1d;
+}
+
+#transaction-list li.over-budget .transaction-name,
+#transaction-list li.over-budget .transaction-amount {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+[data-theme="dark"] #transaction-list li.over-budget .transaction-name,
+[data-theme="dark"] #transaction-list li.over-budget .transaction-amount {
+  color: #f87171;
+}
+
+/* Warning badge shown on over-budget items */
+.over-budget-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #dc2626;
+  background-color: #fee2e2;
+  border: 1px solid #fca5a5;
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+  margin-left: 0.35rem;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+[data-theme="dark"] .over-budget-badge {
+  color: #f87171;
+  background-color: #3d1515;
+  border-color: #7f1d1d;
 }
 
 #transaction-list li:last-child {
