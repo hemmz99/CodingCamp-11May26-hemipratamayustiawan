@@ -68,7 +68,17 @@
       </form>
 
       <section id="transaction-list-section" aria-label="Transaction List">
-        <h2>Transactions</h2>
+        <div class="section-header">
+          <h2>Transactions</h2>
+          <div class="sort-control">
+            <label for="sort-order" class="sort-label">Sort by amount:</label>
+            <select id="sort-order" aria-label="Sort transactions by amount">
+              <option value="none">Default</option>
+              <option value="desc">Highest first</option>
+              <option value="asc">Lowest first</option>
+            </select>
+          </div>
+        </div>
         <ul id="transaction-list" aria-live="polite"></ul>
         <p id="transaction-list-empty">No transactions recorded yet.</p>
       </section>

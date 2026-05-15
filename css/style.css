@@ -311,12 +311,53 @@ main {
   min-height: 0;
 }
 
-#transaction-list-section h2 {
+/* Section header: title + sort control side by side */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.875rem;
+  flex-shrink: 0;
+}
+
+.section-header h2 {
   font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 0.875rem;
   color: var(--color-accent);
-  flex-shrink: 0;
+  margin-bottom: 0;
+}
+
+/* Sort control */
+.sort-control {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.sort-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.sort-control select {
+  padding: 0.25rem 0.5rem;
+  border: 1.5px solid var(--color-border-input);
+  border-radius: 6px;
+  background-color: var(--color-input-bg);
+  color: var(--color-text);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.2s ease;
+}
+
+.sort-control select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
 }
 
 #transaction-list {

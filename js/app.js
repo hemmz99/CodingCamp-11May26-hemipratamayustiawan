@@ -526,7 +526,20 @@ function renderTransactionList() {
   // Has transactions — hide empty-state message
   if (emptyEl) emptyEl.style.display = 'none';
 
-  for (const tx of transactions) {
+  // Sort a shallow copy based on the sort dropdown — never mutate the source array
+  const sortOrder = document.getElementById('sort-order')
+    ? document.getElementById('sort-order').value
+    : 'none';
+
+  const sorted = transactions.slice();
+  if (sortOrder === 'desc') {
+    sorted.sort((a, b) => b.amount - a.amount);
+  } else if (sortOrder === 'asc') {
+    sorted.sort((a, b) => a.amount - b.amount);
+  }
+  // 'none' → keep insertion order
+
+  for (const tx of sorted) {
     const li = document.createElement('li');
     li.dataset.id = tx.id;
 
@@ -821,5 +834,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const formEl = document.getElementById('input-form');
   if (formEl) {
     formEl.addEventListener('submit', handleFormSubmit);
+  }
+
+  // Wire up the sort dropdown — re-render list on change
+  const sortEl = document.getElementById('sort-order');
+  if (sortEl) {
+    sortEl.addEventListener('change', renderTransactionList);
   }
 });
