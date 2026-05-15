@@ -1,0 +1,463 @@
+/* Expense & Budget Visualizer - Stylesheet */
+
+/* ============================================================
+   1. CSS Reset & Base Styles
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #1a1a2e;
+  background-color: #f0f2f5;
+  min-width: 320px;
+  overflow-x: hidden;
+}
+
+h1,
+h2 {
+  line-height: 1.25;
+}
+
+ul {
+  list-style: none;
+}
+
+button,
+input,
+select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* ============================================================
+   2. Main Layout Container
+   ============================================================ */
+
+main {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ============================================================
+   3. Balance Display Section
+   ============================================================ */
+
+#balance-display {
+  background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(15, 52, 96, 0.3);
+}
+
+#balance-display h1 {
+  font-size: clamp(1.1rem, 4vw, 1.5rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  word-break: break-word;
+}
+
+#balance-amount {
+  color: #e2b96f;
+  font-weight: 700;
+}
+
+/* ============================================================
+   4. Input Form
+   ============================================================ */
+
+#input-form {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+#input-form h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #0f3460;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.875rem;
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #fafafa;
+  color: #1a1a2e;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  min-height: 2.5rem;
+  /* Prevent inputs from overflowing on narrow viewports */
+  max-width: 100%;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #0f3460;
+  box-shadow: 0 0 0 3px rgba(15, 52, 96, 0.15);
+  background-color: #ffffff;
+}
+
+/* Remove number input spinners for cleaner look (optional) */
+.form-group input[type="number"]::-webkit-inner-spin-button,
+.form-group input[type="number"]::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
+/* ============================================================
+   5. Field Error Messages
+   ============================================================ */
+
+.field-error {
+  display: block;
+  font-size: 0.8rem;
+  color: #dc2626;
+  min-height: 1.1em; /* Reserve space to avoid layout shift */
+  word-break: break-word;
+}
+
+/* Highlight the input when its sibling error is non-empty */
+.form-group:has(.field-error:not(:empty)) input,
+.form-group:has(.field-error:not(:empty)) select {
+  border-color: #dc2626;
+  background-color: #fff5f5;
+}
+
+/* ============================================================
+   6. Submit Button
+   ============================================================ */
+
+#input-form button[type="submit"] {
+  display: block;
+  width: 100%;
+  padding: 0.625rem 1rem;
+  margin-top: 0.5rem;
+  background-color: #0f3460;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+  min-height: 2.75rem;
+  /* Ensure button is always tappable on mobile */
+  touch-action: manipulation;
+}
+
+#input-form button[type="submit"]:hover {
+  background-color: #16213e;
+}
+
+#input-form button[type="submit"]:active {
+  transform: scale(0.98);
+}
+
+#input-form button[type="submit"]:focus-visible {
+  outline: 3px solid #e2b96f;
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   7. Transaction List Section
+   ============================================================ */
+
+#transaction-list-section {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  /* Prevent section itself from growing unbounded */
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+#transaction-list-section h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.875rem;
+  color: #0f3460;
+  flex-shrink: 0;
+}
+
+/* Scrollable transaction list container — Requirement 2.3 */
+#transaction-list {
+  overflow-y: auto;
+  max-height: 320px;
+  padding-right: 0.25rem; /* Space for scrollbar */
+  /* Smooth scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Scrollbar styling (Webkit) */
+#transaction-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+#transaction-list::-webkit-scrollbar-track {
+  background: #f0f2f5;
+  border-radius: 3px;
+}
+
+#transaction-list::-webkit-scrollbar-thumb {
+  background: #c0c8d8;
+  border-radius: 3px;
+}
+
+#transaction-list::-webkit-scrollbar-thumb:hover {
+  background: #8a96b0;
+}
+
+/* Individual transaction list items (rendered by JS) */
+#transaction-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: 8px;
+  background-color: #f8f9fb;
+  margin-bottom: 0.5rem;
+  border: 1px solid #e8ecf2;
+  flex-wrap: wrap;
+  word-break: break-word;
+}
+
+#transaction-list li:last-child {
+  margin-bottom: 0;
+}
+
+/* Transaction item details (name, amount, category) */
+#transaction-list li .transaction-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  flex: 1;
+  min-width: 0;
+}
+
+#transaction-list li .transaction-name {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#transaction-list li .transaction-amount {
+  font-size: 0.875rem;
+  color: #0f3460;
+  font-weight: 500;
+}
+
+#transaction-list li .transaction-category {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Delete button inside list items */
+#transaction-list li button {
+  flex-shrink: 0;
+  padding: 0.3rem 0.6rem;
+  background-color: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  min-height: 2rem;
+  touch-action: manipulation;
+}
+
+#transaction-list li button:hover {
+  background-color: #fca5a5;
+}
+
+#transaction-list li button:focus-visible {
+  outline: 3px solid #0f3460;
+  outline-offset: 2px;
+}
+
+/* Empty state message */
+#transaction-list-empty {
+  font-size: 0.9rem;
+  color: #9ca3af;
+  text-align: center;
+  padding: 1.5rem 0;
+  font-style: italic;
+}
+
+/* ============================================================
+   8. Chart Section
+   ============================================================ */
+
+#chart-section {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#chart-section h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.875rem;
+  color: #0f3460;
+  align-self: flex-start;
+  width: 100%;
+}
+
+/* Canvas wrapper — constrain chart so it never overflows */
+#spending-chart {
+  width: 100% !important;
+  max-width: 320px;
+  height: auto !important;
+  display: block;
+}
+
+/* Empty state for chart */
+#chart-empty {
+  font-size: 0.9rem;
+  color: #9ca3af;
+  text-align: center;
+  padding: 1.5rem 0;
+  font-style: italic;
+  width: 100%;
+}
+
+/* ============================================================
+   9. Non-Blocking Error / Warning Banner
+   ============================================================ */
+
+/* The JS uses inline styles for the banner, but these classes
+   provide a baseline if the banner element is given a class. */
+.error-banner,
+.warning-banner {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  max-width: min(90vw, 480px);
+  width: max-content;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  word-break: break-word;
+  text-align: center;
+}
+
+.error-banner {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.warning-banner {
+  background-color: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
+/* ============================================================
+   10. Responsive Layout — 320px and above
+   ============================================================ */
+
+/*
+ * The base styles above are already mobile-first (single column,
+ * fluid widths, no fixed pixel widths that could cause overflow).
+ * The rules below refine the layout at larger breakpoints.
+ */
+
+/* Small phones: 320px – 479px
+   Everything is already single-column. Just ensure padding is
+   tight enough to avoid horizontal scroll. */
+@media (max-width: 479px) {
+  main {
+    padding: 0.75rem;
+    gap: 1rem;
+  }
+
+  #balance-display {
+    padding: 1rem;
+  }
+
+  #input-form,
+  #transaction-list-section,
+  #chart-section {
+    padding: 1rem;
+  }
+
+  #transaction-list {
+    max-height: 240px;
+  }
+
+  #spending-chart {
+    max-width: 260px;
+  }
+}
+
+/* Tablets and wider: 600px+ — optional two-column layout hint */
+@media (min-width: 600px) {
+  main {
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+
+  #spending-chart {
+    max-width: 380px;
+  }
+}
+
+/* Desktop: 720px+ — max-width already constrains the container */
+@media (min-width: 720px) {
+  main {
+    padding: 2rem 1.5rem;
+  }
+}
